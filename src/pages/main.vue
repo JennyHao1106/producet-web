@@ -2,7 +2,7 @@
     <div id="entry">
       <div class="main-pane">
         <el-row :gutter="20">
-          <el-col :span="12"><el-button type="text" size="large" @click="open('safe')"><router-link to>安全生产预警管控平台</router-link></el-button></el-col>
+          <el-col :span="12"><el-button type="text" size="large" @click="open('safe')">安全生产预警管控平台</el-button></el-col>
           <el-col :span="12"><el-button type="text" size="large" @click="open('search')">复合材料自动铺丝机缺陷检测</el-button></el-col>
         </el-row>       
       </div>

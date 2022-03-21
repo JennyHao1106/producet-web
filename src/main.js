@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import 'element-plus/dist/index.css'
-import { ElButton, ElRow, ElCol, ElForm, ElTabs, ElTabPane, ElDivider, ElUpload, ElIcon } from 'element-plus';
+import { ElButton, ElRow, ElCol, ElForm, ElTabs, ElTabPane, ElDivider, ElUpload, ElIcon,ElDialog ,ElCard} from 'element-plus';
 import mainComponent from './pages/main.vue';
 import safeComponent from './pages/safe/main.vue'
 import searchComponent from './pages/search/main.vue'
@@ -16,6 +16,8 @@ app.use(ElTabPane)
 app.use(ElDivider)
 app.use(ElUpload)
 app.use(ElIcon)
+app.use(ElDialog)
+app.use(ElCard)
 
 const routes = [
     {
