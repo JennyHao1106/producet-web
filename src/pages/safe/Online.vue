@@ -6,8 +6,11 @@
                     list-type="picture-card"
                     :auto-upload="false"
                     action="#"
+                    :http-request="uploadFile"
                     multiple
                     :file-list="fileList"
+                    ref="upload"
+                    on-success="handleUploadSuccess"
                 >
                     <template #default>
                         <el-icon>
@@ -46,7 +49,7 @@
             <img width="100%" :src="dialogImageUrl" alt />
         </el-dialog>
         <div class="safe-online-main-center">
-            <el-button type="primary" @click="handleUpload">上传并分析</el-button>
+            <el-button type="primary" @click="handleRelease">分析</el-button>
         </div>
         <div class="safe-online-main-right">
             <el-card>ss</el-card>
@@ -56,6 +59,7 @@
 
 <script>
 import { Plus, ZoomIn, Delete } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
 export default {
     name: "safe-online",
@@ -70,9 +74,10 @@ export default {
             dialogVisible: ref(false),
             disabled: ref(false),
             fileSizeIsSatisfy: false,
-            fileList: [],
-            fileData: [],
-            upload: ref()
+            fileList: [],//前端本地组件upload获得的待上传文件列表
+            fileData: '',//用于向后端统一接口传送保存文件数据
+            upload: ref(),
+            baseApi: ref('http://api.serve.demo:3000')
         }
     },
     methods: {
@@ -83,22 +88,26 @@ export default {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
         },
-        handleUpload() {
-            console.log(this.fileList);
-            let formData = new FormData()
-            this.fileList.forEach(file => {
-                formData.append('file', file)
-            });
-            console.log(formData)
-            fetch("http://localhost:3000/serve/upload", {
-                method: 'POST',
-                body: formData
-            }).then(res => {
-                console.log(res)
-            }).catch(err => {
-                console.log(err)
-            })
+        /**
+         * @description 上传图片至服务器
+         */
+        handleRelease() {
+            if (this.fileList.length == 0) {
+                ElMessage({
+                    type: 'warning',
+                    message: '请选择需要上传的图片',
+                    showClose: true
+                })
+            } else {
+                this.$refs.upload.submit();
+                fetch(this.baseApi + '/serve/upload', this.fileData).then(res => { console.log(res) }).catch(err => { console.log(err) })
+            }
+            //this.$refs.upload.submit();
+        },
+        uploadFile(file) {
+            this.fileData.append('files', file.file)
         }
+
     }
 }
 </script>
