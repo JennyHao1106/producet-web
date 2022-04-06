@@ -4,8 +4,11 @@
             <el-tab-pane label="在线检测" name="online">
                 <safeOnline></safeOnline>
             </el-tab-pane>
-            <el-tab-pane label="历史记录" name="history">
+            <el-tab-pane label="在线历史记录" name="online-history">
                 <safeHistory></safeHistory>
+            </el-tab-pane>
+            <el-tab-pane label="本地数据检测" name="local">
+                <safeLocal></safeLocal>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -15,11 +18,13 @@
 import { ref } from "vue"
 import safeOnline from "./Online.vue"
 import safeHistory from "./History.vue"
+import safeLocal from './Local.vue'
 export default {
     name: "safe",
     components: {
         safeOnline,
-        safeHistory
+        safeHistory,
+        safeLocal
     },
     data() {
         return {
