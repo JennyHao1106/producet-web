@@ -6,10 +6,10 @@
                     list-type="picture-card"
                     :auto-upload="false"
                     action="#"
-                    :http-request="uploadFile"
                     multiple
                     :file-list="fileList"
                     ref="upload"
+                    :http-request="uploadFile"
                     on-success="handleUploadSuccess"
                 >
                     <template #default>
@@ -46,13 +46,19 @@
             </el-card>
         </div>
         <el-dialog v-model="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt />
+            <img width="500" :src="dialogImageUrl" alt fit="contain" />
         </el-dialog>
         <div class="safe-online-main-center">
             <el-button type="primary" @click="handleRelease">分析</el-button>
         </div>
         <div class="safe-online-main-right">
-            <el-card>ss</el-card>
+            <el-card>
+                <el-carousel :interval="5000" arrow="always">
+                    <el-carousel-item v-for="item in 4" :key="item">
+                        <h3>{{ item }}</h3>
+                    </el-carousel-item>
+                </el-carousel>
+            </el-card>
         </div>
     </div>
 </template>
@@ -61,6 +67,7 @@
 import { Plus, ZoomIn, Delete } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
+import api from '../../serve/api'
 export default {
     name: "safe-online",
     components: {
@@ -69,6 +76,7 @@ export default {
         Delete,
     },
     data() {
+
         return {
             dialogImageUrl: ref(''),
             dialogVisible: ref(false),
@@ -76,18 +84,18 @@ export default {
             fileSizeIsSatisfy: false,
             fileList: [],//前端本地组件upload获得的待上传文件列表
             fileData: '',//用于向后端统一接口传送保存文件数据
-            upload: ref(),
-            baseApi: ref('http://api.serve.demo:3000')
+            upload: ref()
+
         }
     },
     methods: {
         //删除图片
         handleRemove(file) {
-            let delFileList=[];
-             this.fileList.forEach(item=>{
-                if(item.uid !=file.uid){
+            let delFileList = [];
+            this.fileList.forEach(item => {
+                if (item.uid != file.uid) {
                     delFileList.push(item)
-                }  
+                }
             });
             this.fileList = delFileList;
         },
@@ -108,14 +116,14 @@ export default {
                 })
             } else {
                 this.$refs.upload.submit();
-                fetch(this.baseApi + '/serve/upload', this.fileData).then(res => { console.log(res) }).catch(err => { console.log(err) })
+                api.uploadFile(this.fileData).then(res => { console.log(res) }).catch(err => { console.log(err) })
             }
             //this.$refs.upload.submit();
         },
         uploadFile(file) {
             this.fileData.append('files', file.file)
         },
-        handleUploadSuccess(){
+        handleUploadSuccess() {
 
         }
 
@@ -130,6 +138,9 @@ export default {
     .safe-online-main-left,
     .safe-online-main-right {
         width: 47%;
+        .el-card {
+            bottom: 5px;
+        }
     }
     .safe-online-main-center {
         width: 6%;

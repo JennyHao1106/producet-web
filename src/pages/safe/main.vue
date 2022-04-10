@@ -19,16 +19,26 @@ import { ref } from "vue"
 import safeOnline from "./Online.vue"
 import safeHistory from "./History.vue"
 import safeLocal from './Local.vue'
+import api from '../../serve/api'
 export default {
     name: "safe",
     components: {
         safeOnline,
         safeHistory,
-        safeLocal
+        safeLocal,
+    },
+    mounted() {
+        api.queryFCData();
+    },
+    unmounted() {
+        clearInterval(this.timer);
     },
     data() {
         return {
-            activeName: ref('online')
+            activeName: ref('online'),
+            timer: setInterval(() => {
+                api.queryFCData();
+            }, 1000)
         }
     },
     methods: {
@@ -42,5 +52,21 @@ export default {
 <style lang="less">
 #safe-main {
     margin: 5px;
+    .el-tabs__header {
+        background-color: #545c64;
+        padding: 10px 5px;
+        .el-tabs__active-bar {
+            background-color: #ffd04b;
+        }
+        .el-tabs__item {
+            color: white;
+            :hover {
+                color: #ffd04b;
+            }
+        }
+        .is-active {
+            color: #ffd04b;
+        }
+    }
 }
 </style>

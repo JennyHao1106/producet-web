@@ -13,7 +13,6 @@
 
 export default {
   name: 'main',
-  
   methods:{
     open(flag){
       if(flag=='safe'){
@@ -38,7 +37,7 @@ export default {
   display:flex;
   .main-pane{
     margin: auto;
-    width: 500px;
+     width: 500px;
     .el-button{
       color: aliceblue;
       font-size: 24px;
