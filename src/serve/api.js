@@ -14,14 +14,14 @@ api.queryFCData = function () {
         console.log(err)
     })
 }
-api.uploadFile =  function(file){
-    return axios.post(baseUrl + '/serve/upload',{file})
+api.deleteDir = function () {
+    return axios.get(baseUrl + '/serve/delteDir');
 }
-
-// api.enterFaceInfo = function(){
-//     return axios.get(baseUrl + '/faceinfo/enter')
-// }
-
+api.uploadFile = function (file) {
+    return axios.post(baseUrl + '/serve/upload', file, {
+        headers: { "Content-Type": "multipart/form-data" }
+    })
+}
 export default api;
 
 

@@ -3,7 +3,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import 'element-plus/dist/index.css'
-import { ElButton, ElRow, ElCol, ElForm, ElTabs, ElTabPane, ElDivider, ElUpload, ElIcon, ElDialog, ElCard, ElTable, ElCarousel, ElCarouselItem,ElImage ,ElPagination} from 'element-plus';
+import { ElButton, ElRow, ElCol, ElForm, ElTabs, ElTabPane, ElDivider, ElUpload, ElIcon, ElDialog, ElCard, ElTable, ElCarousel, ElCarouselItem,ElImage ,ElPagination,ElDescriptions,ElDescriptionsItem} from 'element-plus';
 import mainComponent from './pages/main.vue';
 import safeComponent from './pages/safe/main.vue'
 import searchComponent from './pages/search/main.vue'
@@ -25,7 +25,8 @@ app.use(ElCarousel)
 app.use(ElCarouselItem)
 app.use(ElImage)
 app.use(ElPagination)
-
+app.use(ElDescriptions)
+app.use(ElDescriptionsItem)
 const routes = [
     {
         path: "/",

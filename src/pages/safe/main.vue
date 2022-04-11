@@ -49,7 +49,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 #safe-main {
     margin: 5px;
     .el-tabs__header {

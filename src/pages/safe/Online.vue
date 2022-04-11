@@ -14,11 +14,20 @@
                     </div>
                 </template>
             </el-image>
+            <el-descriptions title="检测结果">
+                <el-descriptions-item label="缺陷个数">{{ currentData.number }}</el-descriptions-item>
+                <el-descriptions-item
+                    label="缺陷种类"
+                >{{currentData.classes==''?'':baseFun.chageClassCodeToName(currentData.classes) }}</el-descriptions-item>
+                <el-descriptions-item label="缺陷位置">{{ currentData.xyxy }}</el-descriptions-item>
+                <el-descriptions-item label="检测耗时">{{ currentData.spend_time }}</el-descriptions-item>
+            </el-descriptions>
         </div>
     </div>
 </template>
-<script>import { ref } from "vue"
-
+<script>
+import { ref } from "vue"
+import baseFun from '../../serve/baseFun'
 export default {
     name: '',
     data() {
@@ -30,10 +39,20 @@ export default {
         }
         return {
             tableData: ref([]),
-            currentEnv
+            currentEnv,
+            baseFun
         }
     },
     computed: {
+        currentData() {
+            let obj = {
+                classes:''
+            };
+            if (this.$store.state.fcData.length !== 0) {
+                obj = this.$store.state.fcData.list[0]
+            }
+            return obj;
+        },
         srcOriginal() {
             let src = ""
             if (this.$store.state.fcData.length !== 0) {
@@ -74,6 +93,9 @@ export default {
         padding: 0 5px;
         max-width: 300px;
         max-height: 200px;
+    }
+    .el-descriptions{
+        margin-left: 10px;
     }
     .image-slot {
         display: flex;
