@@ -2,6 +2,8 @@
     <div id="safe-online-main">
         <div class="safe-online-main-left">
             <el-card>
+                <el-row>一次最多上传10张图片，格式必须为.jpg, .jpeg, .png</el-row>
+                <br />
                 <el-upload
                     list-type="picture-card"
                     :auto-upload="false"
@@ -11,9 +13,12 @@
                     ref="upload"
                     :on-success="handleUploadSuccess"
                     accept=".jpg, .jpeg, .png"
+                    :disabled="isUpload"
+                    limit="10"
+                    :on-exceed="handleExceed"
                 >
                     <template #default>
-                        <el-icon v-show="isUpload">
+                        <el-icon>
                             <Plus />
                         </el-icon>
                     </template>
@@ -45,30 +50,29 @@
                 </el-upload>
             </el-card>
         </div>
-        <el-dialog v-model="dialogVisible">
+        <!-- <el-dialog v-model="isUpload">
             <img width="500" :src="dialogImageUrl" alt fit="contain" />
-        </el-dialog>
+        </el-dialog>-->
         <div class="safe-online-main-center">
-            <el-row><el-button type="primary" @click="handleRelease">分析</el-button></el-row>
-            <el-row><el-button type="primary" @click="handleReset">重置</el-button></el-row>
+            <el-row>
+                <el-button type="primary" @click="handleRelease">分析</el-button>
+            </el-row>
+            <el-row>
+                <el-button type="primary" @click="handleReset">重置</el-button>
+            </el-row>
         </div>
         <div class="safe-online-main-right">
             <el-card>
                 <el-carousel :interval="5000" arrow="always" height="85vh">
                     <el-carousel-item v-for="item in dealFileList" :key="item">
-                        <el-image
-                            :src="currentEnv + item.deal_pic"
-                            fit="scale-down"
-                            max-height="60vh"
-                            width="80%"
-                        ></el-image>
+                        <el-image :src="currentEnv + item.deal_pic" fit="scale-down"></el-image>
                         <el-descriptions title="检测结果">
                             <el-descriptions-item label="缺陷个数">{{ item.number }}</el-descriptions-item>
                             <el-descriptions-item
                                 label="缺陷种类"
                             >{{ baseFun.chageClassCodeToName(item.classes) }}</el-descriptions-item>
                             <el-descriptions-item label="缺陷位置">{{ item.xyxy }}</el-descriptions-item>
-                            <el-descriptions-item label="检测耗时">{{ item.spend_time }}</el-descriptions-item>
+                            <el-descriptions-item label="检测耗时">{{ item.spend_time }}ms</el-descriptions-item>
                         </el-descriptions>
                     </el-carousel-item>
                 </el-carousel>
@@ -113,7 +117,7 @@ export default {
             currentEnv,
             imgHeight: '300px',
             baseFun,
-            isUpload:ref(true)
+            isUpload: ref(false)
         }
     },
     methods: {
@@ -147,7 +151,7 @@ export default {
                     formData.append("file", item.raw)
                 });
                 let that = this;
-                this.isUpload = false
+                this.isUpload = true
                 api.deleteDir().then(() => {
                     api.uploadFile(formData).then(res => {
                         that.dealFileList = res.data.data.list;
@@ -161,10 +165,17 @@ export default {
                 }).catch(err => { console.log(err) });
             }
         },
-        handleReset(){
-            this.isUpload = true;
-            this.fileList=[];
-            this.dealFileList=[];
+        handleReset() {
+            this.isUpload = false;
+            this.fileList = [];
+            this.dealFileList = [];
+        },
+        handleExceed() {
+            ElMessage({
+                type: 'error',
+                message: "一次做多只能上传10张",
+                showClose: true
+            })
         }
 
     }
@@ -184,13 +195,19 @@ export default {
             bottom: 5px;
         }
     }
+    .safe-online-main-right {
+        .el-image {
+            max-height: 600px;
+            max-width: 600px;
+        }
+    }
     .safe-online-main-center {
         width: 6%;
         display: flex;
-        flex-direction:column;
+        flex-direction: column;
         align-items: center;
-            /* center代表水平方向 */
-            justify-content: center;
+        /* center代表水平方向 */
+        justify-content: center;
         .el-button {
             margin-bottom: 10px;
         }

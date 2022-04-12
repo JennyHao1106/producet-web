@@ -27,6 +27,7 @@ app.use(ElImage)
 app.use(ElPagination)
 app.use(ElDescriptions)
 app.use(ElDescriptionsItem)
+
 const routes = [
     {
         path: "/",

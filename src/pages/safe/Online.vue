@@ -20,7 +20,7 @@
                     label="缺陷种类"
                 >{{currentData.classes==''?'':baseFun.chageClassCodeToName(currentData.classes) }}</el-descriptions-item>
                 <el-descriptions-item label="缺陷位置">{{ currentData.xyxy }}</el-descriptions-item>
-                <el-descriptions-item label="检测耗时">{{ currentData.spend_time }}</el-descriptions-item>
+                <el-descriptions-item label="检测耗时">{{ currentData.spend_time }}ms</el-descriptions-item>
             </el-descriptions>
         </div>
     </div>
@@ -91,8 +91,8 @@ export default {
     }
     .el-image {
         padding: 0 5px;
-        max-width: 300px;
-        max-height: 200px;
+        max-width: 600px;
+        max-height: 600px;
     }
     .el-descriptions{
         margin-left: 10px;
