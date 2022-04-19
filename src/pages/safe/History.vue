@@ -6,7 +6,7 @@
                 <el-table-column prop="number" label="缺陷个数" />
                 <el-table-column label="缺陷种类">
                     <template #default="scope">
-                        <div>{{ baseFun.chageClassCodeToName(scope.row.classes) }}</div>
+                        <div>{{scope.row.classes==''?'': baseFun.chageClassCodeToName(scope.row.classes) }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column prop="xyxy" label="缺陷位置" />

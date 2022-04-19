@@ -55,14 +55,14 @@
         </el-dialog>-->
         <div class="safe-online-main-center">
             <el-row>
-                <el-button type="primary" @click="handleRelease">分析</el-button>
+                <el-button type="primary" @click="handleRelease" :disabled="buttonDisable">分析</el-button>
             </el-row>
             <el-row>
-                <el-button type="primary" @click="handleReset">重置</el-button>
+                <el-button type="primary" @click="handleReset" :disabled="buttonDisable">重置</el-button>
             </el-row>
         </div>
         <div class="safe-online-main-right">
-            <el-card>
+            <el-card v-loading="isLoad">        
                 <el-carousel :interval="5000" arrow="always" height="85vh">
                     <el-carousel-item v-for="item in dealFileList" :key="item">
                         <el-image :src="currentEnv + item.deal_pic" fit="scale-down"></el-image>
@@ -70,7 +70,7 @@
                             <el-descriptions-item label="缺陷个数">{{ item.number }}</el-descriptions-item>
                             <el-descriptions-item
                                 label="缺陷种类"
-                            >{{ baseFun.chageClassCodeToName(item.classes) }}</el-descriptions-item>
+                            >{{ item.classes == '' ? '' : baseFun.chageClassCodeToName(item.classes) }}</el-descriptions-item>
                             <el-descriptions-item label="缺陷位置">{{ item.xyxy }}</el-descriptions-item>
                             <el-descriptions-item label="检测耗时">{{ item.spend_time }}ms</el-descriptions-item>
                         </el-descriptions>
@@ -117,7 +117,9 @@ export default {
             currentEnv,
             imgHeight: '300px',
             baseFun,
-            isUpload: ref(false)
+            isUpload: ref(false),
+            buttonDisable: ref(false),
+            isLoad:ref(false)
         }
     },
     methods: {
@@ -146,23 +148,32 @@ export default {
                     showClose: true
                 })
             } else {
+                this.buttonDisable = true;
+                this.isLoad=true;
                 let formData = new FormData();
                 this.fileList.forEach(item => {
+                    // console.log("formdata append");
                     formData.append("file", item.raw)
                 });
                 let that = this;
                 this.isUpload = true
+                // console.log("fileList",this.fileList);
+                // console.log("formData:",formData);
                 api.deleteDir().then(() => {
                     api.uploadFile(formData).then(res => {
                         that.dealFileList = res.data.data.list;
+                        that.buttonDisable = false;
+                        this.isLoad=false;
                     }).catch(err => {
                         ElMessage({
                             type: 'error',
                             message: err.msg,
                             showClose: true
                         })
+                        that.buttonDisable = false;
+                        this.isLoad=false;
                     })
-                }).catch(err => { console.log(err) });
+                }).catch(err => { console.log(err); this.buttonDisable = false; this.isLoad=false;});
             }
         },
         handleReset() {
